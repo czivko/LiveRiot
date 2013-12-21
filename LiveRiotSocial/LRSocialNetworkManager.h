@@ -19,18 +19,22 @@ typedef enum SocialNetworkType : NSUInteger {
 
 + (LRSocialNetworkManager *)sharedManager;
 
+// Call this method in AppDelegate |- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions|
+- (void)setup;
+
+// Call this method in AppDelgate |- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation|
+- (BOOL)handleOpenURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication;
+
+// Return Yes for login accounts, return No for signed out accounts
 - (BOOL)checkPlatformLoginStatus:(SocialNetworkType)type;
+
+- (NSString *)userNameForPlatform:(SocialNetworkType)type;
 
 - (void)openFacebookConnectionWithCallback:(void(^)(NSError *))callback;
 
 - (void)closeFacebookConnection;
 
-- (void)openTwitterConnectionWithController:(UIViewController *)sender
-                                   callback:(void(^)(BOOL success))callback;
-
-- (void)openTwitterIOSConnectionWithName:(NSString *)twitterAccount;
-
-- (NSArray *) twitterIOSAccountsWithCallback:(void (^)(NSError *))callback;
+- (void)openTwitterConnectionWithCallback:(void(^)(NSError *error))callback;
 
 - (void)closeTwitterConnection;
 
@@ -38,14 +42,8 @@ typedef enum SocialNetworkType : NSUInteger {
 
 - (void)closeTumblrConnection;
 
-- (NSString *)userNameForPlatform:(SocialNetworkType)type;
-
-- (void)setup;
-
-// post tweet on Twitter
-// return true if using tweet sheet
-// return false if using Twitter OAuth
-- (bool)postOnTwitterWithController:(UIViewController *)sender initText:(NSString *)initText post:(NSString *)post completion:(void (^)(NSError *))completion;
+- (void)postOnTwitter:(NSString *)post
+           completion:(void (^)(NSError *))completion;
 
 - (void)postOnTumblr:(NSString *)post
                 link:(NSString *)link
